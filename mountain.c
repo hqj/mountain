@@ -10,6 +10,8 @@
 #define MAXSTRIDE 15        /* Stride x8 bytes */
 #define MAXELEMS MAXBYTES/sizeof(long) 
 
+#define MBYTES (1024 * 1024)
+
 /* $begin mountainfuns */
 long data[MAXELEMS];      /* The global array we'll be traversing */
 
@@ -25,6 +27,7 @@ int main()
     int size;        /* Working set size (in bytes) */
     int stride;      /* Stride (in array elements) */
     double Mhz;      /* Clock frequency */
+	int i;
 
     init_data(data, MAXELEMS); /* Initialize each element in data */
     Mhz = mhz(0);              /* Estimate the clock frequency */
@@ -52,8 +55,24 @@ int main()
 	    printf("%.0f\t", run(size, stride, Mhz));
 	    
 	}
+
 	printf("\n");
     }
+
+	printf("\n\n");
+/* test the cpu cache size */
+	for (i = 1; i < 32; i++) {
+		size = i * MBYTES;
+
+		printf("%dm\t", i);
+
+		for (stride = 1; stride <= MAXSTRIDE; stride++) {
+			printf("%.0f\t", run(size, stride, Mhz));
+		}
+
+		printf("\n");
+	}
+
     exit(0);
 }
 /* $end mountainmain */
